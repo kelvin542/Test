@@ -4,7 +4,9 @@ Estúdio local para corrigir cores de uma região da imagem usando uma referênc
 
 ## Executar
 
-Para abrir sem servidor: execute `npm run build` e abra `dist/Tom-Exato.html` no Chrome ou Edge. Esse arquivo contém o aplicativo completo, funciona offline e pode ser copiado para outro computador. Não abra `index.html` diretamente: a versão de desenvolvimento usa módulos JavaScript externos que precisam de um servidor HTTP.
+As páginas `index.html` e `docs/index.html` incluem o CSS e o JavaScript completos. O aplicativo funciona mesmo quando o ambiente de prévia não consegue carregar arquivos externos. O CSS fonte continua em `style.css`, a lógica em `app.js` e `color.js`, e o template da interface em `src/page.html`. Depois de editar esses fontes, execute `npm run build:entry` para atualizar a página principal, ou `npm run build:pages` para atualizar também o site de hospedagem.
+
+`npm run build` gera `dist/Tom-Exato.html` sem alterar os arquivos versionados. Essa versão também contém o aplicativo completo e não precisa carregar arquivos CSS ou JavaScript externos.
 
 Na pasta do projeto, execute `npm start` (Node e Python 3), ou `python3 -m http.server 8000 --bind 0.0.0.0`. Abra o aplicativo na porta 8000 no seu navegador. Para uso local no seu computador: `http://localhost:8000`.
 
@@ -18,7 +20,7 @@ Na pasta do projeto, execute `npm start` (Node e Python 3), ou `python3 -m http.
 
 `npm run build` também gera `dist/site/index.html`, um site completo e independente pronto para hospedagem estática. Quem usa o aplicativo hospedado precisa apenas de um navegador: não precisa instalar ou executar programas no computador. As imagens continuam sendo processadas no navegador e não são enviadas ao GitHub.
 
-`npm run build:pages` gera também `docs/index.html`, com **CSS e JavaScript incorporados**. Essa versão está pronta para publicação por branch, sem depender de carregar um arquivo CSS separado. O código-fonte conserva `style.css` para manutenção.
+`npm run build:pages` atualiza a página principal `index.html` e `docs/index.html`, com **CSS e JavaScript incorporados**. Essa versão está pronta para publicação por branch, sem depender de carregar um arquivo CSS separado. O código-fonte conserva `style.css` para manutenção.
 
 Em **Settings → Pages**, configure **Deploy from a branch**, branch **main**, pasta **/docs**, e salve. Depois de alterar o aplicativo, rode `npm test`, `npm run build:pages`, valide o HTML gerado e envie o código e `docs/index.html` à branch main. Confirme as permissões e a disponibilidade de Pages para o plano e a visibilidade atuais; não altere a visibilidade de um repositório privado para contornar uma limitação de hospedagem.
 

@@ -29,6 +29,10 @@ def run():
                 # even where enterprise browser policy disallows file://.
                 page.set_content(Path(standalone).read_text(), wait_until="load")
             else:
+                # Simulate previews that cannot resolve adjacent CSS or JS files.
+                page.route("**/style.css", lambda route: route.abort())
+                page.route("**/app.js", lambda route: route.abort())
+                page.route("**/color.js", lambda route: route.abort())
                 url = os.environ.get("TOM_EXATO_URL", "http://127.0.0.1:8000")
                 response = page.goto(url)
                 if not url.startswith("file:"):
@@ -190,6 +194,9 @@ def run():
             if standalone:
                 assert not network_requests, network_requests
                 print("PASS: standalone HTML completes all operations without any HTTP requests.")
+            else:
+                assert not any(request.endswith(("/style.css", "/app.js", "/color.js")) for request in network_requests), network_requests
+                print("PASS: the main page renders with CSS and runs without adjacent asset files.")
             print("PASS: responsive mobile layout and no JavaScript exceptions.")
             browser.close()
 

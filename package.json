@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-standalone.mjs",
+    "build:entry": "node scripts/build-standalone.mjs --entry",
     "build:pages": "node scripts/build-standalone.mjs --pages",
     "start": "python3 -m http.server 8000 --bind 0.0.0.0",
     "test": "node --test tests/*.test.js"

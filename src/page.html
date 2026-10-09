@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6fb">
+  <title>Tom Exato · Estúdio de cor</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23724ce0'/%3E%3Cpath d='M32 12 52 32 32 52 12 32Z' fill='white'/%3E%3Cpath d='M32 23 41 32 32 41 23 32Z' fill='%23724ce0'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="./"><span class="brand-icon" aria-hidden="true">◈</span><span>Tom<span class="brand-light">Exato</span><small>SEU ESTÚDIO DE COR</small></span></a>
+    <div class="header-actions"><span class="local-badge"><i></i> Suas fotos protegidas</span><button class="button secondary" id="open-help">Como usar <span aria-hidden="true">?</span></button></div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow">UM TOM. DO SEU JEITO.</div><h1>Acerte o tom <span>da pele.</span></h1><p>Escolha a cor, marque a pele e veja a diferença.</p></div>
+      <button id="export" class="button primary" disabled><span aria-hidden="true">↓</span> Baixar PNG</button>
+    </section>
+    <nav class="workflow" aria-label="Passos para corrigir a imagem">
+      <ol><li class="current" data-stage="image"><span class="workflow-number">1</span><div><b>Envie o rosto</b><small>A imagem que será corrigida</small></div></li><li data-stage="selection"><span class="workflow-number">2</span><div><b>Escolha o tom e a pele</b><small>Uma referência ou um HEX</small></div></li><li data-stage="result"><span class="workflow-number">3</span><div><b>Aplique e baixe</b><small>Seu resultado em PNG</small></div></li></ol>
+    </nav>
+    <div class="studio">
+      <section class="panel editor-panel">
+        <div class="editor-heading"><div><div class="panel-title"><span class="step">1</span><h2>Imagem do rosto</h2></div><p class="panel-subtitle">Marque apenas a pele que deseja corrigir.</p></div><button id="replace-image" class="text-button" hidden>Trocar imagem ↗</button></div>
+        <div class="toolbar" aria-label="Ferramentas de seleção">
+          <div class="tool-group">
+            <button class="tool active" data-tool="polygon" title="Clique ao redor da pele para desenhar um contorno" aria-label="Selecionar por contorno" aria-pressed="true"><span aria-hidden="true">⬡</span> Contorno</button>
+            <button class="tool" data-tool="brush" title="Pinte a área de pele que deseja selecionar" aria-label="Pintar seleção" aria-pressed="false"><span aria-hidden="true">◉</span> Pintar</button>
+            <button class="tool" data-tool="eraser" title="Remover áreas da seleção" aria-label="Apagar seleção" aria-pressed="false"><span aria-hidden="true">◇</span> Apagar</button>
+            <button class="tool" data-tool="sample" title="Capturar o tom original da pele para preservar textura" aria-label="Capturar tom original" aria-pressed="false" hidden><span aria-hidden="true">⌖</span> Tom original</button>
+          </div>
+          <button id="undo" class="icon-button" title="Desfazer seleção (Ctrl/⌘+Z)" aria-label="Desfazer seleção" disabled>↶</button>
+        </div>
+        <div class="canvas-workspace" id="image-drop">
+          <label class="upload main-upload" id="main-upload">
+            <input id="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/bmp">
+            <span class="empty-art" aria-hidden="true"><span class="art-head"></span><span class="art-body"></span><span class="art-sample"></span><span class="art-target">＋</span></span>
+            <h3>Vamos começar com o rosto?</h3><span class="upload-description">Arraste uma imagem para cá ou escolha um arquivo.</span><strong class="upload-action"><span aria-hidden="true">↑</span> Escolher imagem</strong><span class="upload-formats">PNG, JPG, WebP ou BMP · até 50 MB</span>
+          </label>
+          <div class="canvas-stage" id="canvas-stage" hidden><div class="canvas-frame" id="canvas-frame" hidden><canvas id="image-canvas" aria-label="Imagem para corrigir"></canvas><canvas id="overlay-canvas" tabindex="0" aria-label="Área de seleção: clique para desenhar um contorno ou use o pincel"></canvas></div></div>
+          <span id="before-label" class="before-label" hidden>ORIGINAL</span>
+        </div>
+        <div class="editor-footer"><span id="image-details">Sua imagem aparecerá aqui</span><div class="zoom-actions" aria-label="Zoom"><button id="zoom-out" title="Diminuir zoom" aria-label="Diminuir zoom" disabled>−</button><span id="zoom-value">—</span><button id="zoom-in" title="Aumentar zoom" aria-label="Aumentar zoom" disabled>+</button><button id="zoom-fit" disabled>Ajustar</button></div><div class="view-actions"><label><input type="checkbox" id="show-mask" checked> Mostrar seleção</label><button id="before" class="button subtle" aria-pressed="false" disabled>Ver original</button></div></div>
+        <div class="selection-options">
+          <div class="brush-control" hidden><label for="brush-size">Tamanho do pincel <span id="brush-value">32 px</span></label><input id="brush-size" type="range" min="1" max="300" value="32"></div>
+          <button id="close-polygon" class="button secondary" disabled>Concluir seleção <span aria-hidden="true">✓</span></button>
+          <button id="clear-selection" class="text-button" disabled>Limpar seleção</button>
+        </div>
+        <p class="tool-help" id="tool-help">Clique ao redor da pele e depois em “Concluir seleção”. Evite olhos, cabelo e lábios.</p>
+      </section>
+      <aside class="panel reference-panel" id="reference-panel-drop">
+        <div class="panel-title"><span class="step">2</span><h2>Escolha o tom</h2></div><p class="help">Use uma foto de referência ou digite a cor.</p>
+        <label class="upload small" id="reference-drop"><input id="reference-input" type="file" accept="image/png,image/jpeg,image/webp,image/bmp"><span class="upload-icon" aria-hidden="true">＋</span><div><strong>Adicionar referência</strong><span>Uma foto ou print do tom desejado</span></div></label>
+        <div id="reference-frame" class="reference-frame" hidden><canvas id="reference-canvas" aria-label="Imagem de referência. Clique para capturar uma cor."></canvas><span class="image-hint">Clique na imagem para capturar o tom</span></div>
+        <div class="file-line" id="reference-file" hidden><span></span><button class="text-button" id="replace-reference">Trocar</button></div>
+        <div class="color-section"><div class="section-label">TOM QUE VOCÊ QUER</div><div class="color-control"><label class="color-swatch" id="color-swatch" title="Abrir seletor de cor"><input type="color" id="color-picker" value="#C99478"></label><div><label for="hex">Código hexadecimal</label><div class="hex-field"><span>#</span><input id="hex" value="C99478" maxlength="7" spellcheck="false" aria-describedby="hex-error"></div></div><button class="icon-button" id="copy-hex" title="Copiar hexadecimal" aria-label="Copiar hexadecimal">⧉</button></div><p id="hex-error" class="error" role="alert" hidden>Digite 6 caracteres, como C99478.</p><div class="rgb-values" id="rgb-values"><span>R <b>201</b></span><span>G <b>148</b></span><span>B <b>120</b></span></div><div class="sample-info" id="sample-info">Clique na referência para capturar a cor exata.</div></div>
+      </aside>
+      <aside class="panel settings-panel">
+        <div class="panel-title"><span class="step">3</span><h2>Veja a transformação</h2></div><p class="help">Como você quer aplicar a cor?</p>
+        <fieldset class="modes"><legend class="sr-only">Modo de correção</legend><label class="mode-card selected"><input type="radio" name="mode" value="exact" checked><div class="mode-top"><strong>HEX exato</strong><span class="mode-badge">100% RGB</span></div><p>Cor idêntica em toda a seleção. A pele fica uniforme, sem sombras.</p></label><label class="mode-card"><input type="radio" name="mode" value="texture"><div class="mode-top"><strong>Preservar textura</strong></div><p>Mantém sombras e detalhes. Os pixels terão HEX diferentes.</p></label></fieldset>
+        <div id="texture-options" class="texture-options" hidden><div class="section-label">TOM ORIGINAL DA PELE</div><div class="source-color"><span id="source-swatch"></span><b id="source-hex">Não capturado</b></div><p class="help">Clique em “Tom original” acima da imagem para capturar a pele. Sem captura, usamos a média da seleção.</p></div>
+        <div class="selection-status"><div class="selection-count"><b id="selected-count">0</b><span>pixels selecionados</span></div><div class="selection-bar"><span id="selection-progress"></span></div><p id="selection-summary">Envie o rosto para começar.</p></div>
+        <button id="apply" class="button primary full" disabled><span aria-hidden="true">✦</span> Aplicar o tom</button><button id="reset" class="text-button full" disabled>Restaurar imagem original</button>
+        <div id="verification" class="verification" hidden aria-live="polite"></div>
+        <details class="export-note"><summary>Como garantimos a precisão?</summary><p>No modo HEX exato, conferimos o RGB de cada pixel selecionado e verificamos o PNG antes de baixar. Mantemos a resolução original. Os valores são sRGB; a aparência pode variar entre telas.</p></details>
+      </aside>
+    </div>
+    <div class="next-step" role="status"><span class="next-icon" aria-hidden="true">↗</span><span id="flow-message">Comece enviando a imagem do rosto. Depois escolha o tom e marque a pele.</span></div>
+    <footer class="page-footer"><span>Tom Exato <span class="footer-dot">·</span> Cada cor conta.</span><span>Sem enviar suas fotos. A correção acontece no navegador.</span></footer>
+  </main>
+  <dialog id="help-dialog"><div class="dialog-heading"><h2>Do rosto ao tom certo</h2><button id="close-help" class="icon-button" aria-label="Fechar instruções">×</button></div><ol><li><strong>Envie o rosto.</strong> Escolha a imagem que deseja corrigir.</li><li><strong>Escolha o tom.</strong> Envie uma referência e clique na cor, ou digite um HEX.</li><li><strong>Marque a pele.</strong> Desenhe um contorno e conclua, ou pinte com o pincel. Apague olhos, lábios e cabelo da seleção.</li><li><strong>Aplique e baixe.</strong> Compare com o original e clique em “Baixar PNG”.</li></ol><p>HEX exato deixa todos os pixels selecionados com a mesma cor. Preservar textura mantém variações de luz e cor.</p><button id="help-done" class="button primary full">Entendi, vamos começar</button></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

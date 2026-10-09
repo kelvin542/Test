@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const [html, css, color, app] = await Promise.all(
-  ['index.html', 'style.css', 'color.js', 'app.js'].map(file => readFile(path.join(root, file), 'utf8')),
+  ['src/page.html', 'style.css', 'color.js', 'app.js'].map(file => readFile(path.join(root, file), 'utf8')),
 );
 const colorFunctions = color.replace(/^export /gm, '');
 const application = app.replace(/^import[^\n]*from '\.\/color\.js';\r?\n/, '');
@@ -22,6 +22,10 @@ await writeFile(output, standalone);
 const siteDirectory = path.join(root, 'dist', 'site');
 await mkdir(siteDirectory, { recursive: true });
 await writeFile(path.join(siteDirectory, 'index.html'), standalone);
+if (process.argv.includes('--entry') || process.argv.includes('--pages')) {
+  await writeFile(path.join(root, 'index.html'), standalone);
+  console.log('Página principal atualizada com CSS e JavaScript incorporados.');
+}
 if (process.argv.includes('--pages')) {
   const docsDirectory = path.join(root, 'docs');
   await mkdir(docsDirectory, { recursive: true });
